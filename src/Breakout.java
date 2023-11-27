@@ -19,13 +19,15 @@ public class Breakout extends GraphicsProgram {
 
 /** Width and height of application window in pixels */
 	public static final int APPLICATION_WIDTH = 400;
-	public static final int APPLICATION_HEIGHT = 600;
+	public static final int APPLICATION_HEIGHT = 625;
 
 /** Dimensions of game board (usually the same) */
-	private static final int WIDTH = APPLICATION_WIDTH;
-	private static final int HEIGHT = APPLICATION_HEIGHT;
+	public static final int WIDTH = APPLICATION_WIDTH;
 
-/** Dimensions of the paddle */
+	// application height includes the top menu, so the height of the actual screen estate is smaller
+	public static final int HEIGHT = APPLICATION_HEIGHT - 25;
+
+	/** Dimensions of the paddle */
 	private static final int PADDLE_WIDTH = 60;
 	private static final int PADDLE_HEIGHT = 10;
 
@@ -57,11 +59,35 @@ public class Breakout extends GraphicsProgram {
 /** Number of turns */
 	private static final int NTURNS = 3;
 
+	/** Platform */
+	private Platform platform;
+
 /* Method: run() */
 /** Runs the Breakout program. */
 	public void run() {
 		/* You fill this in, along with any subsidiary methods */
-
+		setupGame();
 	}
 
+	/**
+	 * Sets up the game, before it can be played.
+	 */
+	private void setupGame() {
+		Platform platform = new Platform(PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_Y_OFFSET);
+		this.platform = platform;
+		add(platform);
+
+		// TODO: add bricks on the screen here
+
+		addMouseListeners();
+	}
+
+	/**
+	 * Listens for the mouse movement and updates platform's position according to mouse position.
+	 * @param e - event
+	 */
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		platform.setLocation(e.getX());
+	}
 }
