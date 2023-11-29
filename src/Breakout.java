@@ -9,10 +9,7 @@
 
 import acm.graphics.*;
 import acm.program.*;
-import acm.util.*;
 
-import java.applet.*;
-import java.awt.*;
 import java.awt.event.*;
 
 public class Breakout extends GraphicsProgram {
@@ -61,25 +58,65 @@ public class Breakout extends GraphicsProgram {
 
 	/** Platform */
 	private Platform platform;
+	/**
+	 * Ball
+	 */
+	private Ball ball;
+	/**
+	 * Game stopped flag.
+	 */
+	private boolean gameStopped = false;
+	private BrickLevels brickLevels;
 
-/* Method: run() */
+	/* Method: run() */
 /** Runs the Breakout program. */
 	public void run() {
 		/* You fill this in, along with any subsidiary methods */
-		setupGame();
+		setupGame(1);
 	}
 
 	/**
 	 * Sets up the game, before it can be played.
 	 */
-	private void setupGame() {
+	private void setupGame(int level) {
 		Platform platform = new Platform(PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_Y_OFFSET);
 		this.platform = platform;
 		add(platform);
 
-		// TODO: add bricks on the screen here
+		ball = new Ball(BALL_RADIUS, getGCanvas(), this::onCollision);
+		add(ball);
+
+		brickLevels = new BrickLevels(WIDTH, HEIGHT, NBRICK_ROWS, NBRICKS_PER_ROW, BRICK_SEP, BRICK_Y_OFFSET, BRICK_WIDTH, BRICK_HEIGHT, getGCanvas());
+		brickLevels.initializeLevelOneBricks();
 
 		addMouseListeners();
+		playGame();
+	}
+
+	/**
+	 * Main game loop.
+	 */
+	private void playGame() {
+		while (!gameStopped) {
+			ball.move();
+			pause(5);
+		}
+	}
+
+	/**
+	 * Handles ball collision with other objects.
+	 * @param collider - object, with which the ball collided
+	 */
+	public void onCollision(GObject collider) {
+		if (collider instanceof Brick) {
+			brickLevels.changeBrick(collider);
+		} else if (collider instanceof Platform) {
+
+		}
+	}
+
+	public void stopGame() {
+		gameStopped = true;
 	}
 
 	/**
@@ -88,6 +125,8 @@ public class Breakout extends GraphicsProgram {
 	 */
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		platform.setLocation(e.getX());
+		if (!gameStopped) {
+			platform.setLocation(e.getX());
+		}
 	}
 }

@@ -97,7 +97,6 @@ public class BrickLevels extends GraphicsProgram {
 		 brick.setNumbOfBricks(b-1);
 		 canvas.remove(gobj);
 		 if(a>1){
-			 
 			 brick= new Brick(x, y, brick_width,brick_height , a-1);
 			 canvas.add(brick);
 		 }
