@@ -4,7 +4,7 @@
  * Name:
  * Section Leader:
  * 
- * This file will eventually implement the game of Breakout.
+ * This file implements the game of Breakout.
  */
 
 import acm.graphics.*;
@@ -53,9 +53,12 @@ public class Breakout extends GraphicsProgram {
 /** Offset of the top brick row from the top */
 	private static final int BRICK_Y_OFFSET = 70;
 
-/** Number of turns */
+/** Number of lives */
 	private static final int NTURNS = 3;
-
+	/**
+	 * Game canvas
+	 */
+	private final GCanvas canvas;
 	/** Platform */
 	private Platform platform;
 	/**
@@ -66,30 +69,34 @@ public class Breakout extends GraphicsProgram {
 	 * Game stopped flag.
 	 */
 	private boolean gameStopped = false;
+	/**
+	 * Brick levels
+	 */
 	private BrickLevels brickLevels;
+	private Thread gameThread;
 
 	/* Method: run() */
-/** Runs the Breakout program. */
-	public void run() {
-		/* You fill this in, along with any subsidiary methods */
-		setupGame(1);
+	/** Runs the Breakout program. */
+	public Breakout (GCanvas canvas) {
+		this.canvas = canvas;
 	}
 
 	/**
 	 * Sets up the game, before it can be played.
 	 */
-	private void setupGame(int level) {
+	public void setupGame(int level) {
+		canvas.addMouseListener(this);
+		canvas.addMouseMotionListener(this);
 		Platform platform = new Platform(PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_Y_OFFSET);
 		this.platform = platform;
-		add(platform);
+		canvas.add(platform);
 
-		ball = new Ball(BALL_RADIUS, getGCanvas(), this::onCollision);
-		add(ball);
+		ball = new Ball(BALL_RADIUS, canvas, this::onCollision);
+		canvas.add(ball);
 
-		brickLevels = new BrickLevels(WIDTH, HEIGHT, NBRICK_ROWS, NBRICKS_PER_ROW, BRICK_SEP, BRICK_Y_OFFSET, BRICK_WIDTH, BRICK_HEIGHT, getGCanvas());
+		brickLevels = new BrickLevels(WIDTH, HEIGHT, NBRICK_ROWS, NBRICKS_PER_ROW, BRICK_SEP, BRICK_Y_OFFSET, BRICK_WIDTH, BRICK_HEIGHT, canvas);
 		brickLevels.initializeLevelOneBricks();
 
-		addMouseListeners();
 		playGame();
 	}
 
@@ -97,9 +104,14 @@ public class Breakout extends GraphicsProgram {
 	 * Main game loop.
 	 */
 	private void playGame() {
-		while (!gameStopped) {
-			ball.move();
-			pause(5);
+		if (gameThread == null || !gameThread.isAlive()) {
+			gameThread = new Thread(() -> {
+                while (!gameStopped) {
+                    ball.move();
+                    pause(5);
+                }
+            });
+			gameThread.start();
 		}
 	}
 
