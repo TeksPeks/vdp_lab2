@@ -115,6 +115,9 @@ public class Breakout extends GraphicsProgram {
 			gameThread = new Thread(() -> {
                 while (!gameStopped) {
                     ball.move();
+					if (brickLevels.getNumbOfBricks() == 0) {
+						stopGame(true);
+					}
                     pause(5);
                 }
             });
