@@ -189,9 +189,9 @@ public class Breakout extends GraphicsProgram {
 	 * Adds "Try again" button to the canvas.
 	 */
 	private void addTryAgainButton() {
-		GRect tryAgain = new GRect(WIDTH / 2 - 50, HEIGHT / 2, 100, 40);
+		GRect tryAgain = new GRect(WIDTH / 2 - 50, HEIGHT / 2 + 25, 100, 40);
 		canvas.add(tryAgain);
-		GLabel tryAgainLabel = new GLabel("Try again", WIDTH / 2 - 40, HEIGHT / 2 + 25);
+		GLabel tryAgainLabel = new GLabel("Try again", WIDTH / 2 - 40, HEIGHT / 2 + 50);
 		tryAgainLabel.setFont("Brotherley-20");
 		canvas.add(tryAgainLabel);
 
