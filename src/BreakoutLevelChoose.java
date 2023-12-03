@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
 import acm.graphics.GCanvas;
@@ -27,7 +28,7 @@ public class BreakoutLevelChoose extends GraphicsProgram {
 	 */
 	public void chooseLevel(){
 		canvas.addMouseListener(this);
-
+		canvas.setBackground(Color.lightGray);
 		/** Plate with number of level*/
 		LevelPlate plate = new LevelPlate(APPLICATION_WIDTH / 2 - 125, APPLICATION_HEIGHT / 2 - 200, 1);
 		canvas.add(plate);
