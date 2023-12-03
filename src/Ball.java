@@ -11,6 +11,11 @@ public class Ball extends GOval {
     public interface CollisionHandler {
         void onCollision(GObject collider);
     }
+
+    @FunctionalInterface
+    public interface StopGame {
+        void stopGame(boolean won);
+    }
     /**
      * Ball's horizontal velocity
      */
@@ -31,19 +36,24 @@ public class Ball extends GOval {
      * Action to perform on collision
      */
     private final CollisionHandler collisionHandler;
+    /**
+     * Action to perform when ball hits the bottom of the screen
+     */
+    private final StopGame gameStopper;
 
     /**
-     * @param radius - radius of the ball
-     * @param canvas - canvas on which the game is played
-     * @param collisionHandler - function, which is called when ball collides with anything
+     * @param radius radius of the ball
+     * @param canvas canvas on which the game is played
+     * @param collisionHandler function, which is called when ball collides with anything
      */
-    Ball(int radius, GCanvas canvas, CollisionHandler collisionHandler) {
+    Ball(int radius, GCanvas canvas, CollisionHandler collisionHandler, StopGame stopGame) {
         super((double) Breakout.WIDTH / 2 - radius, (double) Breakout.HEIGHT / 2 - radius, radius * 2, radius * 2);
         setFilled(true);
 
         generateStartingVX();
         vy = 1.0;
         this.collisionHandler = collisionHandler;
+        this.gameStopper = stopGame;
         if (gameCanvas == null) {
             gameCanvas = canvas;
         }
@@ -72,9 +82,15 @@ public class Ball extends GOval {
         // Check collisions with edges of the screen
         if (getX() <= 0 || getX() + getWidth() >= Breakout.WIDTH) {
             vx = -vx;
+            return;
         }
-        if (getY() <= 0 || getY() + getHeight() >= Breakout.HEIGHT) {
+        if (getY() <= 0) {
             vy = -vy;
+            return;
+        }
+        if (getY() + getHeight() >= Breakout.HEIGHT) {
+            gameStopper.stopGame(false);
+            return;
         }
 
         // Check the centers of the edges
@@ -154,7 +170,7 @@ public class Ball extends GOval {
     }
 
     /**
-     * @param collider - object to check
+     * @param collider object to check
      * @return true if collider exists and is not the ball itself
      */
     private boolean colliderExists(GObject collider) {

@@ -1,8 +1,6 @@
 /*
  * File: Breakout.java
  * -------------------
- * Name:
- * Section Leader:
  * 
  * This file implements the game of Breakout.
  */
@@ -10,10 +8,10 @@
 import acm.graphics.*;
 import acm.program.*;
 
+import java.awt.*;
 import java.awt.event.*;
 
 public class Breakout extends GraphicsProgram {
-
 /** Width and height of application window in pixels */
 	public static final int APPLICATION_WIDTH = 400;
 	public static final int APPLICATION_HEIGHT = 625;
@@ -59,6 +57,10 @@ public class Breakout extends GraphicsProgram {
 	 * Game canvas
 	 */
 	private final GCanvas canvas;
+	/**
+	 * Show level menu
+	 */
+	private final Runnable showLevelMenu;
 	/** Platform */
 	private Platform platform;
 	/**
@@ -75,23 +77,28 @@ public class Breakout extends GraphicsProgram {
 	private BrickLevels brickLevels;
 	private Thread gameThread;
 
-	/* Method: run() */
-	/** Runs the Breakout program. */
-	public Breakout (GCanvas canvas) {
+	/**
+	 * Initializes the game.
+	 * @param canvas canvas on which the game is played
+	 * @param showLevelMenu function, which shows level menu
+	 */
+	public Breakout (GCanvas canvas, Runnable showLevelMenu) {
 		this.canvas = canvas;
+		this.showLevelMenu = showLevelMenu;
 	}
 
 	/**
 	 * Sets up the game, before it can be played.
 	 */
 	public void setupGame(int level) {
+		gameStopped = false;
 		canvas.addMouseListener(this);
 		canvas.addMouseMotionListener(this);
 		Platform platform = new Platform(PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_Y_OFFSET);
 		this.platform = platform;
 		canvas.add(platform);
 
-		ball = new Ball(BALL_RADIUS, canvas, this::onCollision);
+		ball = new Ball(BALL_RADIUS, canvas, this::onCollision, this::stopGame);
 		canvas.add(ball);
 
 		brickLevels = new BrickLevels(WIDTH, HEIGHT, NBRICK_ROWS, NBRICKS_PER_ROW, BRICK_SEP, BRICK_Y_OFFSET, BRICK_WIDTH, BRICK_HEIGHT, canvas);
@@ -104,7 +111,7 @@ public class Breakout extends GraphicsProgram {
 	 * Main game loop.
 	 */
 	private void playGame() {
-		if (gameThread == null || !gameThread.isAlive()) {
+		if (gameThread == null || gameThread.isInterrupted()) {
 			gameThread = new Thread(() -> {
                 while (!gameStopped) {
                     ball.move();
@@ -122,13 +129,42 @@ public class Breakout extends GraphicsProgram {
 	public void onCollision(GObject collider) {
 		if (collider instanceof Brick) {
 			brickLevels.changeBrick(collider);
-		} else if (collider instanceof Platform) {
-
 		}
 	}
 
-	public void stopGame() {
+	/**
+	 * Stops the game and shows result.
+	 * @param won - true if the game was won, false otherwise
+	 */
+	public void stopGame(boolean won) {
 		gameStopped = true;
+		gameThread.interrupt();
+		gameThread = null;
+
+        GLabel label = new GLabel(won ? "You won!" : "You lost!");;
+        label.setFont("Brotherley-50");
+        label.setLocation((WIDTH - label.getWidth()) / 2, (HEIGHT - label.getHeight()) / 2);
+        canvas.add(label);
+		addTryAgainButton();
+	}
+
+	/**
+	 * Adds "Try again" button to the canvas.
+	 */
+	private void addTryAgainButton() {
+		GRect tryAgain = new GRect(WIDTH / 2 - 50, HEIGHT / 2, 100, 40);
+		canvas.add(tryAgain);
+		GLabel tryAgainLabel = new GLabel("Try again", WIDTH / 2 - 40, HEIGHT / 2 + 25);
+		tryAgainLabel.setFont("Brotherley-20");
+		canvas.add(tryAgainLabel);
+
+		tryAgain.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				canvas.removeAll();
+				showLevelMenu.run();
+			}
+		});
 	}
 
 	/**

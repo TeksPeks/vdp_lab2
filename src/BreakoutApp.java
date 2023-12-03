@@ -34,6 +34,7 @@ public class BreakoutApp extends GraphicsProgram {
 					&& e.getY() <= 2.75 * APPLICATION_HEIGHT / 4 - 60) {
 				removeAll();
 				breakoutLevel.chooseLevel();
+				this.getGCanvas().removeMouseListener(this);
 			}
 			if (e.getY() >= 3 * APPLICATION_HEIGHT / 4 - 60
 					&& e.getY() <= 3.75 * APPLICATION_HEIGHT / 4 - 60) {

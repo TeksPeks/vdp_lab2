@@ -19,14 +19,14 @@ public class BreakoutLevelChoose extends GraphicsProgram {
 	public BreakoutLevelChoose(GCanvas canvas){
 		this.setSize(APPLICATION_WIDTH, APPLICATION_HEIGHT);
 		this.canvas=canvas;
-		canvas.addMouseListener(this);
-		breakout = new Breakout(canvas);
+		breakout = new Breakout(canvas, this::chooseLevel);
 	}
 
 	/**
 	 * Adds level plates to the canvas.
 	 */
 	public void chooseLevel(){
+		canvas.addMouseListener(this);
 
 		/** Plate with number of level*/
 		LevelPlate plate = new LevelPlate(APPLICATION_WIDTH / 2 - 125, APPLICATION_HEIGHT / 2 - 200, 1);
@@ -61,6 +61,7 @@ public class BreakoutLevelChoose extends GraphicsProgram {
 		GObject gobj = canvas.getElementAt(last);
 
 		if(gobj instanceof LevelPlate) {
+			canvas.removeMouseListener(this);
 			int level = ((LevelPlate) gobj).getLevelNumb();
 			canvas.removeAll();
 			breakout.setupGame(level);
