@@ -81,10 +81,12 @@ public class Ball extends GOval {
     private void checkCollisions() {
         // Check collisions with edges of the screen
         if (getX() <= 0 || getX() + getWidth() >= Breakout.WIDTH) {
+            collisionHandler.onCollision(null);
             vx = -vx;
             return;
         }
         if (getY() <= 0) {
+            collisionHandler.onCollision(null);
             vy = -vy;
             return;
         }

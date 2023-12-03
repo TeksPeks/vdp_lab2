@@ -7,8 +7,9 @@
 
 import acm.graphics.*;
 import acm.program.*;
+import acm.util.MediaTools;
 
-import java.awt.*;
+import java.applet.AudioClip;
 import java.awt.event.*;
 
 public class Breakout extends GraphicsProgram {
@@ -75,7 +76,14 @@ public class Breakout extends GraphicsProgram {
 	 * Brick levels
 	 */
 	private BrickLevels brickLevels;
+	/**
+	 * Thread, which runs the game.
+	 */
 	private Thread gameThread;
+	/**
+	 * Sound clip, which is played when the ball bounces.
+	 */
+	private final AudioClip bounceClip;
 
 	/**
 	 * Initializes the game.
@@ -85,6 +93,7 @@ public class Breakout extends GraphicsProgram {
 	public Breakout (GCanvas canvas, Runnable showLevelMenu) {
 		this.canvas = canvas;
 		this.showLevelMenu = showLevelMenu;
+		bounceClip = MediaTools.loadAudioClip(System.getProperty("user.dir") + "/assets/bounce.au");
 	}
 
 	/**
@@ -153,6 +162,8 @@ public class Breakout extends GraphicsProgram {
 	 * @param collider - object, with which the ball collided
 	 */
 	public void onCollision(GObject collider) {
+		bounceClip.play();
+
 		if (collider instanceof Brick) {
 			brickLevels.changeBrick(collider);
 		}
