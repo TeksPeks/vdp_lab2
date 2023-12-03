@@ -122,12 +122,22 @@ public class Breakout extends GraphicsProgram {
 		canvas.add(ball);
 
 		brickLevels = new BrickLevels(WIDTH, HEIGHT, NBRICK_ROWS, NBRICKS_PER_ROW, BRICK_SEP, BRICK_Y_OFFSET, BRICK_WIDTH, BRICK_HEIGHT, canvas);
-		if(level<=2){
+		if(level==1){
 			brickLevels.initializeLevelOneBricks();
 		}
 		else{
+			if(level==2){
+				brickLevels.initializeLevelTwoBricks();
+			}
+			else{
+				if(level==3){
+					brickLevels.initializeLevelThreeBricks();
+				}
+				else{
+					brickLevels.initializeLevelFourBricks();
+				}
+			}
 
-				brickLevels.initializeLevelThreeBricks();
 
 		}
 
