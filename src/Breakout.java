@@ -10,7 +10,9 @@ import acm.program.*;
 import acm.util.MediaTools;
 
 import java.applet.AudioClip;
+import java.awt.*;
 import java.awt.event.*;
+
 
 public class Breakout extends GraphicsProgram {
 /** Width and height of application window in pixels */
@@ -103,6 +105,7 @@ public class Breakout extends GraphicsProgram {
 		gameStopped = false;
 		canvas.addMouseListener(this);
 		canvas.addMouseMotionListener(this);
+		canvas.setBackground(Color.lightGray);
 		Platform platform = new Platform(PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_Y_OFFSET);
 		this.platform = platform;
 		canvas.add(platform);
@@ -119,7 +122,14 @@ public class Breakout extends GraphicsProgram {
 		canvas.add(ball);
 
 		brickLevels = new BrickLevels(WIDTH, HEIGHT, NBRICK_ROWS, NBRICKS_PER_ROW, BRICK_SEP, BRICK_Y_OFFSET, BRICK_WIDTH, BRICK_HEIGHT, canvas);
-		brickLevels.initializeLevelOneBricks();
+		if(level<=2){
+			brickLevels.initializeLevelOneBricks();
+		}
+		else{
+
+				brickLevels.initializeLevelThreeBricks();
+
+		}
 
 		playGame();
 	}
@@ -181,6 +191,14 @@ public class Breakout extends GraphicsProgram {
         GLabel label = new GLabel(won ? "You won!" : "You lost!");;
         label.setFont("Brotherley-50");
         label.setLocation((WIDTH - label.getWidth()) / 2, (HEIGHT - label.getHeight()) / 2);
+		if(label.getLabel().equals("You lost!")){
+			AudioClip defeat= MediaTools.loadAudioClip(System.getProperty("user.dir") + "/assets/defeat.au");
+			defeat.play();
+		}
+		else{
+			AudioClip victory= MediaTools.loadAudioClip(System.getProperty("user.dir") + "/assets/victory.au");
+			victory.play();
+		}
         canvas.add(label);
 		addTryAgainButton();
 	}
@@ -193,17 +211,37 @@ public class Breakout extends GraphicsProgram {
 		canvas.add(tryAgain);
 		GLabel tryAgainLabel = new GLabel("Try again", WIDTH / 2 - 40, HEIGHT / 2 + 50);
 		tryAgainLabel.setFont("Brotherley-20");
+
 		canvas.add(tryAgainLabel);
+		GRect exit = new GRect(WIDTH / 2 - 50, HEIGHT / 2 + 25+50, 140, 40);
+		canvas.add(exit);
+		GLabel exitLabel = new GLabel("Close Window", WIDTH / 2 - 40, HEIGHT / 2 + 50+50);
+		exitLabel.setFont("Brotherley-20");
+
+		canvas.add(exitLabel);
 
 		tryAgain.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				canvas.removeAll();
-				showLevelMenu.run();
+				if(e.getY()<HEIGHT / 2 + 50+50) {
+					canvas.removeAll();
+					showLevelMenu.run();
+				}
+				if(e.getY()>=HEIGHT / 2 + 50+50){
+					System.exit(0);
+				}
+			}
+		});
+		exit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+
+					System.exit(0);
+
 			}
 		});
 	}
-
 	/**
 	 * Listens for the mouse movement and updates platform's position according to mouse position.
 	 * @param e - event
