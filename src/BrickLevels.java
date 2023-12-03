@@ -59,25 +59,13 @@ public class BrickLevels extends GraphicsProgram {
 		 for(int j=0;j<nbricks_per_row; j++){
 			 int x= j*(brick_width+brick_sep);
 			 int y= brick_y_offset+i*(brick_height+brick_sep);
-			 
-			 if(i==0 || i==1){ 
-				 brick= new Brick(x, y, brick_width,brick_height , 5);
+
+			 brick= new Brick(x, y, brick_width,brick_height , 1);
+			 if(i==0 || i==1){
+
 				 if(j==0){
 					 brick.setNumbOfBricks(1);
 				 }
-			 }
-			 if(i==2 || i==3){ 
-				 brick= new Brick(x, y, brick_width,brick_height , 4);
-			 }
-			 if(i==4 || i==5){ 
-				 brick= new Brick(x, y, brick_width,brick_height , 3);
-
-			 }
-			 if(i==6 || i==7){ 
-				 brick= new Brick(x, y, brick_width,brick_height , 2);
-			 }
-			 if(i==8 || i==9){ 
-				 brick= new Brick(x, y, brick_width,brick_height , 1);
 			 }
 			 canvas.add(brick);
 			 
@@ -85,7 +73,69 @@ public class BrickLevels extends GraphicsProgram {
 	 }
 
  }
+	/**
+	 * initializes bricks in the second level of the game
+	 */
+	public void initializeLevelTwoBricks(){
+		for(int i=0;i<nbrick_rows; i++){
+			for(int j=0;j<nbricks_per_row; j++){
+				int x= j*(brick_width+brick_sep);
+				int y= brick_y_offset+i*(brick_height+brick_sep);
+
+				if(i==0 || i==1){
+					brick= new Brick(x, y, brick_width,brick_height , 5);
+					if(j==0){
+						brick.setNumbOfBricks(1);
+					}
+				}
+				if(i==2 || i==3){
+					brick= new Brick(x, y, brick_width,brick_height , 4);
+				}
+				if(i==4 || i==5){
+					brick= new Brick(x, y, brick_width,brick_height , 3);
+
+				}
+				if(i==6 || i==7){
+					brick= new Brick(x, y, brick_width,brick_height , 2);
+				}
+				if(i==8 || i==9){
+					brick= new Brick(x, y, brick_width,brick_height , 1);
+				}
+				canvas.add(brick);
+
+			}
+		}
+
+	}
+	/**
+	 * initializes bricks in the third level of the game
+	 */
 	public void initializeLevelThreeBricks() {
+		for (int i = 0; i < nbrick_rows; i++) {
+			int startX = (int) ((width - (nbricks_per_row - i) * (brick_width + brick_sep)) / 2);
+
+			for (int j = 0; j < nbricks_per_row - i; j++) {
+				int x = startX + j * (brick_width + brick_sep);
+				int y = brick_y_offset + i * (brick_height + brick_sep);
+
+					brick= new Brick(x, y, brick_width,brick_height , 1);
+
+				if(i==0) {
+
+					if (j == 0) {
+						brick.setNumbOfBricks(1);
+					}
+				}
+
+
+				canvas.add(brick);
+			}
+		}
+	}
+	/**
+	 * initializes bricks in the fourth level of the game
+	 */
+	public void initializeLevelFourBricks() {
 		for (int i = 0; i < nbrick_rows; i++) {
 			int startX = (int) ((width - (nbricks_per_row - i) * (brick_width + brick_sep)) / 2);
 
@@ -118,7 +168,6 @@ public class BrickLevels extends GraphicsProgram {
 			}
 		}
 	}
-
  /**
   * changes color of the brick or removes it completely
   * @param gobj object from the game
