@@ -11,11 +11,6 @@ public class Ball extends GOval {
     public interface CollisionHandler {
         void onCollision(GObject collider);
     }
-
-    @FunctionalInterface
-    public interface StopGame {
-        void stopGame(boolean won);
-    }
     /**
      * Ball's horizontal velocity
      */
@@ -24,6 +19,10 @@ public class Ball extends GOval {
      * Ball's vertical velocity
      */
     private double vy;
+    /**
+     * Speed multiplier
+     */
+    private double speedMultiplier = 1.0;
     /**
      * Random number generator
      */
@@ -39,21 +38,22 @@ public class Ball extends GOval {
     /**
      * Action to perform when ball hits the bottom of the screen
      */
-    private final StopGame gameStopper;
+    private final Runnable onFail;
 
     /**
      * @param radius radius of the ball
      * @param canvas canvas on which the game is played
      * @param collisionHandler function, which is called when ball collides with anything
      */
-    Ball(int radius, GCanvas canvas, CollisionHandler collisionHandler, StopGame stopGame) {
+    Ball(int radius, GCanvas canvas, double speedMultiplier, CollisionHandler collisionHandler, Runnable onFail) {
         super((double) Breakout.WIDTH / 2 - radius, (double) Breakout.HEIGHT / 2 - radius, radius * 2, radius * 2);
         setFilled(true);
 
         generateStartingVX();
         vy = 1.0;
+        this.speedMultiplier = speedMultiplier;
         this.collisionHandler = collisionHandler;
-        this.gameStopper = stopGame;
+        this.onFail = onFail;
         if (gameCanvas == null) {
             gameCanvas = canvas;
         }
@@ -71,7 +71,7 @@ public class Ball extends GOval {
      * Moves the ball by its velocity
      */
     public void move() {
-        this.move(vx, vy);
+        this.move(vx * speedMultiplier, vy * speedMultiplier);
         checkCollisions();
     }
 
@@ -89,7 +89,7 @@ public class Ball extends GOval {
             return;
         }
         if (getY() + getHeight() >= Breakout.HEIGHT) {
-            gameStopper.stopGame(false);
+            loseLife();
             return;
         }
 
@@ -167,6 +167,16 @@ public class Ball extends GOval {
             }
             return;
         }
+    }
+
+    /**
+     * Moves the ball to the center of the screen and generates new starting velocity
+     */
+    private void loseLife() {
+        onFail.run();
+        this.setLocation((double) Breakout.WIDTH / 2 - getWidth() / 2, (double) Breakout.HEIGHT / 2 - getHeight() / 2);
+        generateStartingVX();
+        pause(500);
     }
 
     /**
