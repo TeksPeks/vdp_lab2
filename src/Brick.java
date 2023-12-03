@@ -1,3 +1,8 @@
+/*
+ * class that implements brick
+ * File: Brick.java
+ * Author: Maksym Semeniuk, Myroslav Verstiuk
+ */
 import java.awt.Color;
 
 import acm.graphics.GRect;

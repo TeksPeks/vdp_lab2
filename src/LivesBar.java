@@ -3,7 +3,11 @@ import acm.graphics.GImage;
 import acm.graphics.GLabel;
 
 import java.awt.*;
-
+/*
+ * class that implements bar of lives
+ * File: LivesBar.java
+ * Author: Maksym Semeniuk, Myroslav Verstiuk
+ */
 public class LivesBar extends GCompound {
     /**
      * Separation between lives.

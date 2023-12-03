@@ -1,4 +1,8 @@
-
+/*
+ * class that implements pattern of bricks in levels
+ * File: Bricklevels.java
+ * Author: Maksym Semeniuk, Myroslav Verstiuk
+ */
 import acm.graphics.GCanvas;
 
 import acm.graphics.GObject;

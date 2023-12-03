@@ -1,8 +1,17 @@
+/*
+ * class that represents ball
+ * File: Ball.java
+ * Author: Maksym Semeniuk, Myroslav Verstiuk
+ */
+
 import acm.graphics.GCanvas;
 import acm.graphics.GObject;
 import acm.graphics.GOval;
 import acm.util.RandomGenerator;
 
+/**
+ * creates ball
+ */
 public class Ball extends GOval {
     /**
      * Functional interface for collision handling

@@ -1,3 +1,8 @@
+/*
+ * class that implements screen in which user chooses level
+ * File: BreakoutLevelChoose.java
+ * Author: Maksym Semeniuk, Myroslav Verstiuk
+ */
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
@@ -7,7 +12,9 @@ import acm.graphics.GObject;
 import acm.graphics.GPoint;
 import acm.program.GraphicsProgram;
 
-
+/**
+ * creates canvas with level buttons
+ */
 public class BreakoutLevelChoose extends GraphicsProgram {
 
 	/** Width and height of application window in pixels */

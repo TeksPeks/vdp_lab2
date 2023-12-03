@@ -1,5 +1,9 @@
 import acm.graphics.GRect;
-
+/*
+ * class that implements platform
+ * File: Platform.java
+ * Author: Maksym Semeniuk, Myroslav Verstiuk
+ */
 public class Platform extends GRect {
     /**
      * absolute Y position of the platform on the screen

@@ -1,3 +1,8 @@
+/*
+ * class that implements homescreen
+ * File: BreakoutApp.java
+ * Author: Maksym Semeniuk, Myroslav Verstiuk
+ */
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 
@@ -8,6 +13,9 @@ import acm.graphics.GRect;
 import acm.program.GraphicsProgram;
 
 @SuppressWarnings("serial")
+/**
+ * creates homescreen with 2 buttons("Begin Game", "Close Window")
+ */
 public class BreakoutApp extends GraphicsProgram {
 
 	/** Width and height of application window in pixels */
@@ -44,6 +52,9 @@ public class BreakoutApp extends GraphicsProgram {
 
 	}
 
+	/**
+	 * adds button with label "Begin Game"
+	 */
 	private void addNewGameButton() {
 		GRect quit = new GRect(APPLICATION_WIDTH / 4 - 10,
 				2 * APPLICATION_HEIGHT / 4 - 60,
@@ -55,7 +66,9 @@ public class BreakoutApp extends GraphicsProgram {
 		add(welcome);
 
 	}
-
+	/**
+	 * adds button with label "Quit"
+	 */
 	private void addQuitButton() {
 		GRect quit = new GRect(APPLICATION_WIDTH / 4 - 10,
 				3 * APPLICATION_HEIGHT / 4 - 60,
@@ -69,7 +82,9 @@ public class BreakoutApp extends GraphicsProgram {
 		add(welcome);
 
 	}
-
+	/**
+	 * adds label "Breakout"
+	 */
 	private void addLabel() {
 		GLabel welcome = new GLabel("Breakout", APPLICATION_WIDTH / 4,
 				APPLICATION_HEIGHT / 4);
